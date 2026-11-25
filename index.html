@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATHLETIC AGENCY × كابتن أحمد نبوي — كاليندر المحتوى الشهري</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-canvas: #09090B;
+      --bg-surface: #111114;
+      --bg-elevated: #18181C;
+      --border-hairline: rgba(255, 255, 255, 0.08);
+      --orange-core: #FF5500;
+      --orange-soft: rgba(255, 85, 0, 0.14);
+      --text-main: #FAFAFA;
+      --text-muted: #A1A1AA;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+    }
+    .font-en { font-family: 'Outfit', sans-serif; }
+    .lux-card {
+      background: linear-gradient(180deg, rgba(24,24,28,0.88) 0%, rgba(17,17,20,0.96) 100%);
+      border: 1px solid var(--border-hairline);
+      border-radius: 18px;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .lux-card:hover {
+      border-color: rgba(255, 85, 0, 0.32);
+    }
+    .nav-pill {
+      background: #131316;
+      border: 1px solid var(--border-hairline);
+      border-radius: 9999px;
+      padding: 4px;
+    }
+    .nav-btn {
+      border-radius: 9999px;
+      transition: all 0.2s ease;
+    }
+    .nav-btn.active {
+      background: var(--orange-core);
+      color: #FFFFFF;
+      box-shadow: 0 4px 18px rgba(255, 85, 0, 0.35);
+    }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #0C0C0E; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #3F3F46; border-radius: 999px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #FF5500; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-[#FF5500] selection:text-white">
+
+  <!-- CLEAN LUXURY HEADER -->
+  <header class="sticky top-0 z-40 bg-[#09090B]/92 backdrop-blur-xl border-b border-white/[0.07]">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 h-18 py-3 flex items-center justify-between gap-4">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3.5 shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-[#FF5500] flex items-center justify-center font-en font-extrabold text-white text-sm tracking-tight shadow-[0_0_24px_rgba(255,85,0,0.4)]">
+          AA
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-en font-bold text-sm tracking-wide text-white">ATHLETIC AGENCY</span>
+            <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-white/[0.06] text-[#A1A1AA] border border-white/[0.08]">بوابة العميل</span>
+          </div>
+          <div class="text-xs text-[#A1A1AA] mt-0.5">كابتن أحمد نبوي — خطة المحتوى الشهرية (30 يوم)</div>
+        </div>
+      </div>
+
+      <!-- Center Pill Navigation -->
+      <nav class="nav-pill hidden md:flex items-center gap-1">
+        <button id="navOverview" onclick="switchView('overview')" class="nav-btn px-5 py-2 text-xs font-bold text-[#A1A1AA] hover:text-white">
+          النظرة العامة
+        </button>
+        <button id="navCalendar" onclick="switchView('calendar')" class="nav-btn active px-5 py-2 text-xs font-bold">
+          كاليندر النشر
+        </button>
+        <button id="navStories" onclick="switchView('stories')" class="nav-btn px-5 py-2 text-xs font-bold text-[#A1A1AA] hover:text-white">
+          خطة الاستوريز
+        </button>
+        <button id="navAnalytics" onclick="switchView('analytics')" class="nav-btn px-5 py-2 text-xs font-bold text-[#A1A1AA] hover:text-white">
+          الأهداف والتحليلات
+        </button>
+      </nav>
+
+      <!-- Live Sync Button -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <button id="btnSyncNow" onclick="syncFromGoogleSheet(false)" class="px-4 py-2 rounded-xl text-xs font-extrabold bg-[#18181C] border border-white/[0.12] hover:border-[#FF5500] text-white flex items-center gap-2 transition">
+          <span id="syncDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+          <span id="syncLabel">تحديث الآن</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="md:hidden px-5 pb-3 flex items-center gap-2 overflow-x-auto">
+      <button id="mNavOverview" onclick="switchView('overview')" class="nav-btn px-4 py-1.5 text-xs font-bold text-[#A1A1AA] bg-[#141417]">النظرة العامة</button>
+      <button id="mNavCalendar" onclick="switchView('calendar')" class="nav-btn active px-4 py-1.5 text-xs font-bold">كاليندر النشر</button>
+      <button id="mNavStories" onclick="switchView('stories')" class="nav-btn px-4 py-1.5 text-xs font-bold text-[#A1A1AA] bg-[#141417]">خطة الاستوريز</button>
+      <button id="mNavAnalytics" onclick="switchView('analytics')" class="nav-btn px-4 py-1.5 text-xs font-bold text-[#A1A1AA] bg-[#141417]">الأهداف والتحليلات</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-5 sm:px-8 py-7 space-y-7">
+
+    <!-- 1. TOP KPI STRIP -->
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="lux-card p-5 flex items-center justify-between">
+        <div>
+          <div class="text-xs text-[#A1A1AA] mb-1.5">إجمالي محتوى الشهر</div>
+          <div id="kpiTotal" class="font-en text-3xl font-extrabold text-white">45</div>
+          <div class="text-xs text-[#FF5500] font-bold mt-1">30 يوم • 4 مراحل</div>
+        </div>
+        <div class="w-11 h-11 rounded-2xl bg-[#FF5500]/12 border border-[#FF5500]/25 flex items-center justify-center text-xl">📅</div>
+      </div>
+
+      <div class="lux-card p-5 flex items-center justify-between">
+        <div>
+          <div class="text-xs text-[#A1A1AA] mb-1.5">تم النشر فعلياً</div>
+          <div id="kpiPublished" class="font-en text-3xl font-extrabold text-emerald-400">14</div>
+          <div id="kpiPct" class="text-xs text-emerald-400/90 font-bold mt-1">31% نسبة الإنجاز</div>
+        </div>
+        <div class="w-11 h-11 rounded-2xl bg-emerald-500/12 border border-emerald-500/25 flex items-center justify-center text-emerald-400 text-xl font-bold">✓</div>
+      </div>
+
+      <div class="lux-card p-5 flex items-center justify-between">
+        <div>
+          <div class="text-xs text-[#A1A1AA] mb-1.5">متبقي للنشر</div>
+          <div id="kpiPending" class="font-en text-3xl font-extrabold text-white">31</div>
+          <div class="text-xs text-amber-400 font-bold mt-1">مجدول وجاهز للمتابعة</div>
+        </div>
+        <div class="w-11 h-11 rounded-2xl bg-amber-500/12 border border-amber-500/25 flex items-center justify-center text-amber-400 text-xl">⏳</div>
+      </div>
+
+      <div class="lux-card p-5 flex items-center justify-between">
+        <div>
+          <div class="text-xs text-[#A1A1AA] mb-1.5">ملفات درايف المربوطة</div>
+          <div id="kpiLinked" class="font-en text-3xl font-extrabold text-white">0</div>
+          <div class="text-xs text-[#A1A1AA] mt-1">تُضاف تلقائياً من الشيت</div>
+        </div>
+        <div class="w-11 h-11 rounded-2xl bg-white/[0.05] border border-white/[0.1] flex items-center justify-center text-xl">🔗</div>
+      </div>
+    </section>
+
+    <!-- 2. PARALLEL STRATEGIC MILESTONES STRIP (Point #2 Requested by User) -->
+    <section class="lux-card p-5">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <div class="text-xs font-extrabold text-white tracking-wide">المحطات الاستراتيجية الموازية خلال الشهر</div>
+        <span class="text-[11px] text-[#A1A1AA]">خطوات التجهيز والإطلاق بالتوازي مع النشر اليومي</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Milestone 1 -->
+        <div class="p-4 rounded-2xl bg-[#0D0D10] border border-emerald-500/30 flex items-start gap-3.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 font-en font-extrabold text-sm flex items-center justify-center shrink-0">01</div>
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-extrabold text-white">تظبيط البروفايل والـ 6 هايلايتس</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-bold">مكتمل ✓</span>
+            </div>
+            <p class="text-xs text-[#A1A1AA]">صورة البروفايل الجديدة، تعديل البايو والـ Linktree، وتثبيت الـ 3 فيديوهات.</p>
+          </div>
+        </div>
+
+        <!-- Milestone 2 -->
+        <div class="p-4 rounded-2xl bg-[#0D0D10] border border-[#FF5500]/35 flex items-start gap-3.5">
+          <div class="w-9 h-9 rounded-xl bg-[#FF5500]/15 text-[#FF5500] font-en font-extrabold text-sm flex items-center justify-center shrink-0">02</div>
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-extrabold text-white">إطلاق الويبسايت الرسمي</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#FF5500]/15 text-[#FF5500] font-bold">أيام 10–12</span>
+            </div>
+            <p class="text-xs text-[#A1A1AA]">إطلاق صفحات الهوم والكوتشينج والاستشارات بفيديوهاتها الرسمية.</p>
+          </div>
+        </div>
+
+        <!-- Milestone 3 -->
+        <div class="p-4 rounded-2xl bg-[#0D0D10] border border-white/[0.08] flex items-start gap-3.5">
+          <div class="w-9 h-9 rounded-xl bg-sky-500/15 text-sky-400 font-en font-extrabold text-sm flex items-center justify-center shrink-0">03</div>
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-extrabold text-white">تشغيل الكامبين الإعلانية الممولة</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-400 font-bold">أيام 13–30</span>
+            </div>
+            <p class="text-xs text-[#A1A1AA]">إطلاق دفعة إعلانات الكوتشينج ثم الاستشارات + مضاعفة النشر 2X يومياً.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 1: OVERVIEW                                                    -->
+    <!-- =================================================================== -->
+    <section id="viewOverview" class="hidden grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-8 space-y-6">
+        <!-- Up Next Card -->
+        <div class="lux-card p-6 border-[#FF5500]/35 relative overflow-hidden">
+          <div class="absolute -left-20 -top-20 w-56 h-56 rounded-full bg-[#FF5500]/12 blur-3xl pointer-events-none"></div>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <span class="text-xs font-extrabold text-[#FF5500] tracking-wide">● الفيديو القادم مباشرةً (UP NEXT)</span>
+            <span id="ovNextBadge" class="text-xs px-3 py-1 rounded-full bg-white/[0.06] border border-white/[0.1] text-white font-bold"></span>
+          </div>
+          <div id="ovNextBox" class="space-y-4"></div>
+        </div>
+
+        <!-- Coming Up -->
+        <div class="lux-card p-6">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-base font-extrabold text-white">الفيديوهات القادمة خلال الأيام الجاية</h2>
+            <button onclick="switchView('calendar')" class="text-xs font-bold text-[#FF5500] hover:underline">افتح الكاليندر كامل ⬅</button>
+          </div>
+          <div id="ovComingGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+        </div>
+      </div>
+
+      <!-- Right Column: Phases Breakdown -->
+      <div class="lg:col-span-4 space-y-4">
+        <div class="lux-card p-6">
+          <h3 class="text-base font-extrabold text-white mb-4">توزيع مراحل الشهر</h3>
+          <div class="space-y-3.5 text-xs">
+            <div class="p-4 rounded-2xl bg-[#0D0D10] border-r-4 border-r-[#FF5500] border border-white/[0.06]">
+              <div class="flex justify-between font-extrabold text-white mb-1">
+                <span>المرحلة 1 (أ): التهيئة الأولى</span>
+                <span class="font-en text-[#FF5500]">يوم 1–5</span>
+              </div>
+              <p class="text-[#A1A1AA]">10 فيديوهات (2 يومياً) لتنشيط الحساب واسترجاع الريتش.</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-[#0D0D10] border-r-4 border-r-amber-400 border border-white/[0.06]">
+              <div class="flex justify-between font-extrabold text-white mb-1">
+                <span>المرحلة 1 (ب): التهيئة الثانية</span>
+                <span class="font-en text-amber-400">يوم 6–12</span>
+              </div>
+              <p class="text-[#A1A1AA]">العودة + ثلاثية نايل داروين + فيديوهات الويبسايت + الصدر العلوي.</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-[#0D0D10] border-r-4 border-r-emerald-400 border border-white/[0.06]">
+              <div class="flex justify-between font-extrabold text-white mb-1">
+                <span>المرحلة 2: الإعلانات (Ads)</span>
+                <span class="font-en text-emerald-400">يوم 13–21</span>
+              </div>
+              <p class="text-[#A1A1AA]">4 إعلانات أونلاين كوتشينج ورا بعض + 5 إعلانات استشارات ورا بعض.</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-[#0D0D10] border-r-4 border-r-sky-400 border border-white/[0.06]">
+              <div class="flex justify-between font-extrabold text-white mb-1">
+                <span>المرحلة 3: الثقة والتمارين 2X</span>
+                <span class="font-en text-sky-400">يوم 22–30</span>
+              </div>
+              <p class="text-[#A1A1AA]">18 فيديو (2 يومياً): تمرين للريتش عصراً + فيديو ثقة/إعلان مساءً.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 2: PUBLISHING CALENDAR (CLEAN & SPACIOUS)                      -->
+    <!-- =================================================================== -->
+    <section id="viewCalendar" class="flex flex-col gap-6">
+
+      <!-- Clean Filter & Mode Bar -->
+      <div class="lux-card p-4 flex flex-wrap items-center justify-between gap-4">
+        <!-- View Switcher -->
+        <div class="inline-flex items-center bg-[#09090B] p-1 rounded-xl border border-white/[0.08]">
+          <button id="btnModeMonth" onclick="setCalMode('month')" class="px-4 py-2 rounded-lg text-xs font-extrabold bg-[#FF5500] text-white transition">الشهر (بطاقات)</button>
+          <button id="btnModeWeek" onclick="setCalMode('week')" class="px-4 py-2 rounded-lg text-xs font-bold text-[#A1A1AA] hover:text-white transition">الأسبوع</button>
+          <button id="btnModeList" onclick="setCalMode('list')" class="px-4 py-2 rounded-lg text-xs font-bold text-[#A1A1AA] hover:text-white transition">الجدول الكامل</button>
+        </div>
+
+        <!-- Clean Filters -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <select id="filterPhase" onchange="renderCalendar()" class="bg-[#09090B] border border-white/[0.1] rounded-xl px-3.5 py-2 text-xs font-bold text-white outline-none focus:border-[#FF5500]">
+            <option value="ALL">كل المراحل</option>
+            <option value="P1">المرحلة 1 (أ): التهيئة الأولى (1–5)</option>
+            <option value="P2">المرحلة 1 (ب): التهيئة الثانية (6–12)</option>
+            <option value="P3">المرحلة 2: الإعلانات Ads (13–21)</option>
+            <option value="P4">المرحلة 3: الثقة والتمارين 2X (22–30)</option>
+          </select>
+
+          <select id="filterGoal" onchange="renderCalendar()" class="bg-[#09090B] border border-white/[0.1] rounded-xl px-3.5 py-2 text-xs font-bold text-white outline-none focus:border-[#FF5500]">
+            <option value="ALL">كل الأهداف</option>
+            <option value="Reach">Reach (انتشار)</option>
+            <option value="Followers">Followers (متابعين)</option>
+            <option value="Trust">Trust (ثقة)</option>
+            <option value="Leads">Leads (ليدز)</option>
+            <option value="Direct Sales">Direct Sales (مبيعات)</option>
+          </select>
+
+          <select id="filterStatus" onchange="renderCalendar()" class="bg-[#09090B] border border-white/[0.1] rounded-xl px-3.5 py-2 text-xs font-bold text-white outline-none focus:border-[#FF5500]">
+            <option value="ALL">كل الحالات</option>
+            <option value="تم النشر">تم النشر ✓</option>
+            <option value="لم يُنشر">لم يُنشر ⏳</option>
+          </select>
+
+          <input id="searchBox" oninput="renderCalendar()" type="text" placeholder="ابحث باسم الفيديو..." class="bg-[#09090B] border border-white/[0.1] rounded-xl px-3.5 py-2 text-xs text-white placeholder-[#71717A] outline-none focus:border-[#FF5500] w-48" />
+        </div>
+      </div>
+
+      <!-- Phase Timeline Legend Bar -->
+      <div class="lux-card p-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <span class="text-xs font-extrabold text-white">خط سير الشهر (17 نوفمبر – 16 ديسمبر 2026)</span>
+          <span class="text-[11px] text-[#A1A1AA]">اضغط على أي فيديو لعرض التفاصيل وفتح لينك درايف</span>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-12 gap-2 text-[11px] font-extrabold text-center">
+          <div class="lg:col-span-2 py-2 rounded-xl bg-[#FF5500]/15 text-[#FF5500] border border-[#FF5500]/30">م1 (أ) • يوم 1–5</div>
+          <div class="lg:col-span-3 py-2 rounded-xl bg-amber-500/12 text-amber-400 border border-amber-500/30">م1 (ب) • يوم 6–12 (العودة والويبسايت)</div>
+          <div class="lg:col-span-3 py-2 rounded-xl bg-emerald-500/12 text-emerald-400 border border-emerald-500/30">م2 • يوم 13–21 (الإعلانات Ads)</div>
+          <div class="lg:col-span-4 py-2 rounded-xl bg-sky-500/12 text-sky-400 border border-sky-500/30">م3 • يوم 22–30 (الثقة والتمارين 2X)</div>
+        </div>
+      </div>
+
+      <!-- MONTH VIEW: SPACIOUS 3-COLUMN GRID (NEVER CRAMPED!) -->
+      <div id="calMonthWrap" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+      <!-- WEEK VIEW -->
+      <div id="calWeekWrap" class="hidden flex-col gap-4">
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="selectWeek(1)" id="wkBtn1" class="px-4 py-2 rounded-xl text-xs font-extrabold bg-[#FF5500] text-white">الأسبوع 1 (يوم 1–7)</button>
+          <button onclick="selectWeek(2)" id="wkBtn2" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#18181C] text-[#A1A1AA] border border-white/[0.08]">الأسبوع 2 (يوم 8–14)</button>
+          <button onclick="selectWeek(3)" id="wkBtn3" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#18181C] text-[#A1A1AA] border border-white/[0.08]">الأسبوع 3 (يوم 15–21)</button>
+          <button onclick="selectWeek(4)" id="wkBtn4" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#18181C] text-[#A1A1AA] border border-white/[0.08]">الأسبوع 4 (يوم 22–30)</button>
+        </div>
+        <div id="calWeekGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      </div>
+
+      <!-- LIST TABLE VIEW: CLEAN SIDE-BY-SIDE 30-DAY TABLE -->
+      <div id="calListWrap" class="hidden lux-card overflow-x-auto custom-scroll">
+        <table class="w-full text-right text-xs border-collapse">
+          <thead>
+            <tr class="bg-[#0C0C0F] text-[#A1A1AA] border-b border-white/[0.08]">
+              <th class="p-4 font-bold whitespace-nowrap">اليوم والتاريخ</th>
+              <th class="p-4 font-bold whitespace-nowrap">المرحلة</th>
+              <th class="p-4 font-bold">فيديو 1 (المحتوى • الهدف • الميعاد • الحالة)</th>
+              <th class="p-4 font-bold">فيديو 2 (في الأيام المزدوجة — جنب الأول)</th>
+            </tr>
+          </thead>
+          <tbody id="calListBody" class="divide-y divide-white/[0.06]"></tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 2.5: DAILY STORIES PLAN (LIVE SYNCED WITH TAB 3)               -->
+    <!-- =================================================================== -->
+    <section id="viewStories" class="hidden flex-col gap-6">
+
+      <!-- Today / Next Stories Spotlight -->
+      <div class="lux-card p-6 border-[#FF5500]/35 relative overflow-hidden">
+        <div class="absolute -left-16 -top-16 w-48 h-48 rounded-full bg-[#FF5500]/12 blur-3xl pointer-events-none"></div>
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-extrabold text-[#FF5500]">● خطة ستوريز اليوم القادم (جاهزة للتنفيذ)</span>
+          </div>
+          <span id="stNextMeta" class="text-xs px-3 py-1 rounded-full bg-white/[0.06] border border-white/[0.1] text-white font-bold"></span>
+        </div>
+        <div id="stNextBody" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5"></div>
+      </div>
+
+      <!-- Stories Filter Bar -->
+      <div class="lux-card p-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="text-xs font-extrabold text-white">جدول الاستوريز اليومي (30 يوم — مربوط لايف بالشيت)</div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <select id="stFilterMode" onchange="renderStories()" class="bg-[#09090B] border border-white/[0.1] rounded-xl px-3.5 py-2 text-xs font-bold text-white outline-none focus:border-[#FF5500]">
+            <option value="ALL">كل الأوضاع</option>
+            <option value="تسخين">تسخين وتفاعل (أيام 1–20)</option>
+            <option value="عرض">🔥 عرض العودة الخاص (السبت والأحد)</option>
+            <option value="كامبين">🎯 كامبين وليدز (آخر 10 أيام)</option>
+          </select>
+          <select id="stFilterStatus" onchange="renderStories()" class="bg-[#09090B] border border-white/[0.1] rounded-xl px-3.5 py-2 text-xs font-bold text-white outline-none focus:border-[#FF5500]">
+            <option value="ALL">كل الحالات</option>
+            <option value="تم النشر">تم النشر ✓</option>
+            <option value="لم يُنشر">لم يُنشر ⏳</option>
+          </select>
+          <input id="stSearchBox" oninput="renderStories()" type="text" placeholder="ابحث في الاستوريز..." class="bg-[#09090B] border border-white/[0.1] rounded-xl px-3.5 py-2 text-xs text-white placeholder-[#71717A] outline-none focus:border-[#FF5500] w-44" />
+        </div>
+      </div>
+
+      <!-- 30-Day Spacious Stories Grid -->
+      <div id="storiesGridWrap" class="grid grid-cols-1 lg:grid-cols-2 gap-4"></div>
+
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 3: ANALYTICS & OBJECTIVES                                      -->
+    <!-- =================================================================== -->
+    <section id="viewAnalytics" class="hidden grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="lux-card p-6">
+        <h3 class="text-base font-extrabold text-white mb-1">توزيع الأهداف الاستراتيجية (Primary Objectives)</h3>
+        <p class="text-xs text-[#A1A1AA] mb-5">توازن الشهر بين الانتشار وبناء الثقة وجلب الليدز والمبيعات</p>
+        <div class="relative h-72">
+          <canvas id="chartGoals"></canvas>
+        </div>
+      </div>
+      <div class="lux-card p-6">
+        <h3 class="text-base font-extrabold text-white mb-1">حجم المحتوى حسب كل مرحلة</h3>
+        <p class="text-xs text-[#A1A1AA] mb-5">عدد الفيديوهات في كل مرحلة من المراحل الأربعة</p>
+        <div class="relative h-72">
+          <canvas id="chartPhases"></canvas>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CLEAN VIDEO DETAIL MODAL -->
+  <div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="lux-card w-full max-w-lg p-6 border-white/[0.14]">
+      <div class="flex items-center justify-between border-b border-white/[0.08] pb-3.5 mb-5">
+        <div class="flex items-center gap-2">
+          <span id="mBadge" class="text-[11px] px-2.5 py-1 rounded-full font-bold border"></span>
+          <span id="mSlotLabel" class="text-xs font-bold text-[#A1A1AA]"></span>
+        </div>
+        <button onclick="closeDetailModal()" class="w-8 h-8 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-white font-bold">✕</button>
+      </div>
+      <div id="detailModalBody" class="space-y-4 text-xs"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 left-6 z-50 hidden px-4 py-2.5 rounded-xl bg-[#FF5500] text-white text-xs font-extrabold shadow-2xl"></div>
+
+  <script>
+    const SHEET_ID = "1C1yhF3vr7WQ6xkCl_BjM8H3hD3lRzxGEVzWsR8L9Tdo";
+    const SHEET_TAB = "كاليندر الشهر (نسخة العميل)";
+    const STORIES_TAB = "خطة الاستوريز اليومية";
+    const STORAGE_KEY = "athletic_nabwy_client_cal_v4_stories";
+    const STORIES_STORAGE_KEY = "athletic_nabwy_client_stories_v4";
+    const DEFAULT_STORIES = [{"dayNum": 1, "weekday": "الثلاثاء", "date": "2026-11-17", "mode": "تسخين وتفاعل", "s1": "قهوة الصبح وكلمة سريعة لبداية يوم جديد", "s2": "هوك تشويق: 18 سنة خبرة في الجيم في كام ثانية — استنوا الفيديو 3 عصراً", "s3": "لقطة من الجيم وتمرين النهاردة", "s4": "شير Thumbnail + لينك ريل (خلاصة 18 سنة) و(القصة لسه منتهتش) على كل منصة", "waChannel": "نعم — لينك القناة", "status": "تم النشر"}, {"dayNum": 2, "weekday": "الأربعاء", "date": "2026-11-18", "mode": "تسخين وتفاعل", "s1": "لقطة تلقائية (رايح مشوار / قراءة كتاب)", "s2": "هوك تشويق: أقوى جدول تمشي عليه طول الشهر علمياً — استنوه 3 عصراً", "s3": "سؤال تفاعلي (Ask) عن أكتر عضلة ضعيفة عندك", "s4": "شير Thumbnail + لينك ريل (Arnold Split) و(كتف وذراع) على كل منصة", "waChannel": "لا", "status": "تم النشر"}, {"dayNum": 3, "weekday": "الخميس", "date": "2026-11-19", "mode": "تسخين وتفاعل", "s1": "صباح الخير وروتين الفطار", "s2": "هوك تشويق: خلاصة نظام FST-7 لهاني رامبود للشهر كامل — استنوه 3 عصراً", "s3": "لقطة تلقائية أثناء التمرين في الجيم", "s4": "شير Thumbnail + لينك ريل (FST-7) و(أهم تمرينين) على كل منصة", "waChannel": "نعم — لينك القناة", "status": "تم النشر"}, {"dayNum": 4, "weekday": "الجمعة", "date": "2026-11-20", "mode": "تسخين وتفاعل", "s1": "جمعة مباركة ولحظة هدوء صباحية", "s2": "هوك تشويق: سر ضخامة الدبابة سام سوليك في جدول شهر كامل — استنوه", "s3": "تصويت سريع (Poll): بتفضل أسلوب سام سوليك ولا المدرسة العلمية؟", "s4": "شير Thumbnail + لينك ريل (سام سوليك) و(رامون دينو) على كل منصة", "waChannel": "لا", "status": "تم النشر"}, {"dayNum": 5, "weekday": "السبت", "date": "2026-11-21", "mode": "تسخين وتفاعل", "s1": "قهوة قبل التمرين وكواليس اليوم", "s2": "هوك تشويق: سر أعرض صدر لكريس بومستيد CBum — استنوه 3 عصراً", "s3": "لقطة تلقائية وتشويق لحاجة كبيرة بكرة", "s4": "شير Thumbnail + لينك ريل (CBum) و(ذراع روني كولمان) على كل منصة", "waChannel": "نعم — لينك القناة", "status": "تم النشر"}, {"dayNum": 6, "weekday": "الأحد", "date": "2026-11-22", "mode": "تسخين وتفاعل", "s1": "بداية أسبوع جديدة ورسالة قريبة للجمهور", "s2": "هوك تشويق: القصة الحقيقية لسبب الغياب وتحدي العودة — استنوا الفيديو الساعة 8", "s3": "لقطة كواليس تحدي العودة في الجيم", "s4": "شير Thumbnail + لينك فيديو العودة الرسمي على كل منصة", "waChannel": "لا", "status": "تم النشر"}, {"dayNum": 7, "weekday": "الاثنين", "date": "2026-11-23", "mode": "تسخين وتفاعل", "s1": "قهوة الصبح وتجهيز يوم التمرين", "s2": "هوك تشويق: إزاي البطل نايل داروين بيلعب يوم الـ Push؟ استنوه الليلة 8", "s3": "تحديث يومي من تحدي العودة في الجيم", "s4": "شير Thumbnail + لينك فيديو (بوش نايل داروين) على IG وTikTok وFB", "waChannel": "نعم — لينك القناة", "status": "تم النشر"}, {"dayNum": 8, "weekday": "الثلاثاء", "date": "2026-11-24", "mode": "تسخين وتفاعل", "s1": "لقطة تلقائية (مشوار أو وجبة الصبح)", "s2": "هوك تشويق: أسرار عرض الضهر في يوم الـ Pull لنايل داروين — الليلة 8", "s3": "صندوق أسئلة (Ask): إيه أكتر تمرين ظهر بتحبه؟", "s4": "شير Thumbnail + لينك فيديو (بول نايل داروين) على كل منصة", "waChannel": "لا", "status": "تم النشر"}, {"dayNum": 9, "weekday": "الأربعاء", "date": "2026-11-25", "mode": "تسخين وتفاعل", "s1": "صباح النشاط وتجهيز يوم الرجل", "s2": "هوك تشويق: تمرينة الرجل اللي بتفرق بين الهاوي والبطل — رجل نايل داروين الليلة 8", "s3": "لقطة من تحدي العودة في الجيم", "s4": "شير Thumbnail + لينك فيديو (رجل نايل داروين) على كل منصة", "waChannel": "نعم — لينك القناة", "status": "تم النشر"}, {"dayNum": 10, "weekday": "الخميس", "date": "2026-11-26", "mode": "تسخين وتفاعل", "s1": "قهوة الصبح وكلمة سريعة عن الالتزام", "s2": "هوك تشويق: ليه ناس كتير بتتمرن سنين ومفيش نتيجة؟ النهاردة هتشوف السيستم الكامل الساعة 8", "s3": "لقطة من الجيم أو تحديث تحدي العودة", "s4": "شير Thumbnail + لينك (فيديو الصفحة الرئيسية Home Page) على كل منصة", "waChannel": "لا", "status": "لم يُنشر"}, {"dayNum": 11, "weekday": "الجمعة", "date": "2026-11-27", "mode": "تسخين وتفاعل", "s1": "جمعة مباركة ولقطة تلقائية من اليوم", "s2": "هوك تشويق: إزاي متابعة الأونلاين كوتشينج بتفصّل التمرين والأكل على حياتك؟ استنوه الساعة 8", "s3": "تشويق خفيف: بكرة السبت في مفاجأة وعرض لأول مرة مش هيتكرر", "s4": "شير Thumbnail + لينك (فيديو الكوتشينج للويبسايت) على كل منصة", "waChannel": "نعم — لينك القناة", "status": "لم يُنشر"}, {"dayNum": 12, "weekday": "السبت", "date": "2026-11-28", "mode": "🔥 عرض العودة الخاص", "s1": "قهوة الصبح وإعلان بداية عرض العودة (حصري على الستوري فقط)", "s2": "🔥 فيديو + ديزاين عرض العودة الاستثنائي (1/3 السعر — لمرة واحدة) + لينك مباشر للواتساب", "s3": "هوك تشويق لفيديوهين النهاردة: الصدر العلوي (3 عصراً) + تخيل تكون ملتزم والنتيجة واقفة (8 مساءً)", "s4": "شير Thumbnail + لينك فيديوهين اليوم + تذكير بلينك واتساب للعرض", "waChannel": "نعم — لينك القناة", "status": "لم يُنشر"}, {"dayNum": 13, "weekday": "الأحد", "date": "2026-11-29", "mode": "🔥 عرض العودة الخاص", "s1": "لقطة تلقائية: استجابة رهيبة على عرض العودة (آخر يوم للعرض!)", "s2": "🔥 تذكير بفيديو وديزاين عرض العودة + لينك مباشر للواتساب (IG / FB / TikTok → WhatsApp)", "s3": "هوك تشويق فيديو الليلة: لو يومك كله شغل ومكتب.. إزاي تعمل فورمة؟ استنوه 8 مساءً", "s4": "شير Thumbnail + لينك (إعلان كوتشينج للموظفين) + آخر ساعات في عرض العودة على الواتساب", "waChannel": "لا", "status": "لم يُنشر"}, {"dayNum": 14, "weekday": "الاثنين", "date": "2026-11-30", "mode": "تسخين وتفاعل", "s1": "صباح النشاط وكواليس بداية الأسبوع", "s2": "هوك تشويق: تفتكر فعلاً الأونلاين كوتشينج فرق ولا تقدر تعملها لوحدك؟ استنوا فيديو الساعة 8", "s3": "لقطة من تحدي العودة + صندوق Ask مفتوح", "s4": "شير Thumbnail + لينك فيديو (ليه تشترك في الأونلاين كوتشينج؟) على كل منصة", "waChannel": "نعم — لينك القناة", "status": "لم يُنشر"}, {"dayNum": 15, "weekday": "الثلاثاء", "date": "2026-12-01", "mode": "تسخين وتفاعل", "s1": "لقطة تلقائية (فطار / قهوة / قراءة)", "s2": "هوك تشويق: عايز تخس أو تزيد ومحتاج سيستم طوارئ يظبطلك الدنيا؟ استنوا فيديو الليلة 8", "s3": "مشاركة تريند أو لقطة من التمرين في الجيم", "s4": "شير Thumbnail + لينك فيديو (عايز تخس أو تزيد في سيستم طوارئ) على كل منصة", "waChannel": "لا", "status": "لم يُنشر"}, {"dayNum": 16, "weekday": "الأربعاء", "date": "2026-12-02", "mode": "تسخين وتفاعل", "s1": "كلمة صباحية سريعة عن عقلية الأبطال", "s2": "هوك تشويق: لو أنت رياضي وجسمك مصدر دخلك.. غلطة واحدة تكلفك كتير! استنوه الساعة 8", "s3": "تحديث يومي من تحدي العودة في الجيم", "s4": "شير Thumbnail + لينك فيديو (لو أنت رياضي جسمك مصدر دخلك) على كل منصة", "waChannel": "نعم — لينك القناة", "status": "لم يُنشر"}, {"dayNum": 17, "weekday": "الخميس", "date": "2026-12-03", "mode": "تسخين وتفاعل", "s1": "قهوة الصبح ولحظة تلقائية", "s2": "هوك تشويق: تفتكر إيه سبب إنك دايماً متعصب ومش عارف تخس ولا تتخن؟ هل كل ده ليه سبب واحد؟ استنوا فيديو القولون العصبي 8 مساءً", "s3": "تصويت (Poll): هل الانتفاخ والقولون بيعطلوا تمرينك ودايتك؟", "s4": "شير Thumbnail + لينك فيديو (القولون العصبي والاستشارة التدريبية) على كل منصة", "waChannel": "لا", "status": "لم يُنشر"}, {"dayNum": 18, "weekday": "الجمعة", "date": "2026-12-04", "mode": "تسخين وتفاعل", "s1": "جمعة مباركة ولقطة يومية هادية", "s2": "هوك تشويق: ليه برنامجك متلخبط ومش عارف تبدأ منين ولا تكمل إزاي؟ استنوا فيديو النهاردة الساعة 8", "s3": "لقطة تلقائية أو سؤال تفاعلي للجمهور", "s4": "شير Thumbnail + لينك فيديو (ليه برنامجك متلغبط؟) على كل منصة", "waChannel": "نعم — لينك القناة", "status": "لم يُنشر"}, {"dayNum": 19, "weekday": "السبت", "date": "2026-12-05", "mode": "تسخين وتفاعل", "s1": "صباح الخير وكواليس الجيم", "s2": "هوك تشويق: إيه أغبى سؤال ممكن تسأله ومضيع عليك شهور في الجيم؟ استنوا الإجابة الساعة 8", "s3": "لقطة من تحدي العودة أو صندوق أسئلة Ask", "s4": "شير Thumbnail + لينك فيديو (أغبى سؤال ممكن تسأله) على كل منصة", "waChannel": "لا", "status": "لم يُنشر"}, {"dayNum": 20, "weekday": "الأحد", "date": "2026-12-06", "mode": "تسخين وتفاعل", "s1": "قهوة الصبح وبداية أسبوع قوي", "s2": "هوك تشويق: عندك 50 فيديو تمرين محفوظ ومش بتطبق ولا واحد؟ ده عنوان فيديو النهاردة الساعة 8", "s3": "تحديث تحدي العودة وتشويق لمرحلة الكامبين", "s4": "شير Thumbnail + لينك فيديو (50 فيديو محفوظ) على كل منصة", "waChannel": "نعم — لينك القناة", "status": "لم يُنشر"}, {"dayNum": 21, "weekday": "الاثنين", "date": "2026-12-07", "mode": "🎯 كامبين وليدز", "s1": "لقطة سريعة من يوم الكابتن ومتابعة العملاء", "s2": "ستوري بيعي 1 (اعتراض الضمان): كتير بيسأل إيه يضمنلي نتيجة من الاستشارة؟ شوف النتيجة دي + هوك فيديو الليلة", "s3": "ستوري بيعي 2 (Feedback حقيقي): سكرين شوت رأي عميل بعد الاستشارة + لينك الويبسايت / واتساب", "s4": "شير Thumbnail + لينك فيديو (إيه يضمنلي في الاستشارة التدريبية) على كل منصة", "waChannel": "لا", "status": "لم يُنشر"}, {"dayNum": 22, "weekday": "الثلاثاء", "date": "2026-12-08", "mode": "🎯 كامبين وليدز", "s1": "ستوري تحول (قبل): لو وقتك ضيق ومبتقدرش تتمرن غير نص ساعة في اليوم، تفتكر توصل لفين في 90 يوم؟", "s2": "ستوري تحول (بعد + CTA): محمد وصل للنتيجة دي في 90 يوم أونلاين كوتشينج — ابعتلي رسالة على واتساب أو ادخل لينك الويبسايت", "s3": "لقطة تلقائية من التمرين وتحدي العودة", "s4": "شير فيديوهين اليوم: (تمرينة الظهر 3 عصراً) + (أكبر غلطة في التضخيم 8 مساءً) باللينكات", "waChannel": "نعم — لينك القناة", "status": "لم يُنشر"}, {"dayNum": 23, "weekday": "الأربعاء", "date": "2026-12-09", "mode": "🎯 كامبين وليدز", "s1": "ستوري اعتراض (التنشيف والحرمان): فاكر إن التنشيف يعني أكل مسلوق وتجويع؟", "s2": "ستوري إثبات + CTA: شوف تحول عميل نزل دهون وزاد عضل بأكل عادي — تفاصيل الباقات على الويبسايت أو واتساب", "s3": "لقطة سريعة من وجبة الكابتن اليومية", "s4": "شير فيديوهين اليوم: (تمرينة التراي 3 عصراً) + (أكبر غلطة في التنشيف 8 مساءً) باللينكات", "waChannel": "لا", "status": "لم يُنشر"}, {"dayNum": 24, "weekday": "الخميس", "date": "2026-12-10", "mode": "🎯 كامبين وليدز", "s1": "ستوري فئة (الرياضيين): بتتمرن كل يوم وجسمك ثابت أو بتتعرض لإصابات متكررة؟", "s2": "ستوري حل + CTA: الاستشارة التدريبية بتحل جذر المشكلة في جلسة واحدة — احجز من الويبسايت أو واتساب", "s3": "لقطة تلقائية من الجيم", "s4": "شير فيديوهين اليوم: (الذراع 30 ثانية) + (لو أنت رياضي وبتتمرن كل يوم) باللينكات", "waChannel": "نعم — لينك القناة", "status": "لم يُنشر"}, {"dayNum": 25, "weekday": "الجمعة", "date": "2026-12-11", "mode": "🎯 كامبين وليدز", "s1": "جمعة مباركة + ستوري اعتراض (تغيير الجدول): كل أسبوع بتغير تمارينك ومفيش تطور؟", "s2": "ستوري Feedback + CTA: رسالة صوتية/سكرين شوت عميل كسر ثباته معانا — ابعتلي كلمة (متابعة) على واتساب", "s3": "لقطة هادية من يوم الجمعة", "s4": "شير فيديوهين اليوم: (البوش 30 ثانية) + (ليه مش بغير نظام التمرين) باللينكات", "waChannel": "لا", "status": "لم يُنشر"}, {"dayNum": 26, "weekday": "السبت", "date": "2026-12-12", "mode": "🎯 كامبين وليدز", "s1": "ستوري تحول (قبل): كان بيشتكي من القولون والخمول وكرش عنيد رغم الدايت", "s2": "ستوري تحول (بعد + CTA): بعد تعديل السيستم في الاستشارة والمتابعة ده الشكل الجديد — تواصل واتساب أو الويبسايت", "s3": "لقطة كواليس تحدي العودة", "s4": "شير فيديوهين اليوم: (البول 30 ثانية) + (الحقيقة اللي مفيش مدرب بيقولها) باللينكات", "waChannel": "نعم — لينك القناة", "status": "لم يُنشر"}, {"dayNum": 27, "weekday": "الأحد", "date": "2026-12-13", "mode": "🎯 كامبين وليدز", "s1": "ستوري فئة (المناسبات والطوارئ): عندك فرح أو سفرية أو مناسبة قريبة وعايز تلحق تعمل فورمة؟", "s2": "ستوري عرض السيستم + CTA: سيستم الطوارئ والباقات جاهز على الويبسايت — ابعتلنا على واتساب نبدأ فوراً", "s3": "لقطة تلقائية من اليوم", "s4": "شير فيديوهين اليوم: (الرجل 30 ثانية) + (الدعوة في إيدك وتاريخ معروف) باللينكات", "waChannel": "لا", "status": "لم يُنشر"}, {"dayNum": 28, "weekday": "الاثنين", "date": "2026-12-14", "mode": "🎯 كامبين وليدز", "s1": "ستوري اعتراض (السعر والاستثمار): بتصرف قد إيه على مكملات وأنظمة عشوائية بدون نتيجة؟", "s2": "ستوري Feedback + CTA: مقارنة بين العشوائية والمتابعة العلمية + لينك الويبسايت والواتساب", "s3": "لقطة سريعة من تمرين أرنولد سبليت", "s4": "شير فيديوهين اليوم: (الصدر والظهر أرنولد) + (الفيديو الثاني) باللينكات", "waChannel": "نعم — لينك القناة", "status": "لم يُنشر"}, {"dayNum": 29, "weekday": "الثلاثاء", "date": "2026-12-15", "mode": "🎯 كامبين وليدز", "s1": "ستوري تحول (قبل وبعد): أقوى قصة تحول لموظف مشغول 10 ساعات في اليوم", "s2": "ستوري CTA مباشر: لو عندك نفس ظروف الشغل ابعتلنا على واتساب وهنحددلك أنسب باقة أو استشارة", "s3": "لقطة تلقائية مع المتابعين", "s4": "شير فيديوهين اليوم: (الكتف والذراع أرنولد) + (الفيديو الثاني) باللينكات", "waChannel": "لا", "status": "لم يُنشر"}, {"dayNum": 30, "weekday": "الأربعاء", "date": "2026-12-16", "mode": "🎯 كامبين وليدز", "s1": "ملخص إنجاز الشهر وتحدي العودة + شكر للجمهور", "s2": "ستوري إغلاق الشهر (CTA قوي): فتح باب الحجز لدفعة الشهر الجديد (أماكن محدودة) — احجز عبر الويبسايت أو واتساب", "s3": "لقطة ختامية تحفيزية من الجيم", "s4": "شير فيديوهين اليوم: (الرجل أرنولد) + (الفيديو الثاني) باللينكات", "waChannel": "نعم — لينك القناة", "status": "لم يُنشر"}];
+
+    // Fallback initial dataset matching the exact 30-row side-by-side Google Sheet
+    const DEFAULT_DAYS = [
+      { dayNum:1, weekday:"الثلاثاء", date:"2026-11-17", phase:"P1", v1:{ title:"خلاصة 18 سنة في الجيم — تجميعة أقوى التمارين", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" }, v2:{ title:"القصة لسه منتهتش — لو أنت مكاني كنت هتجازف ولا هتنسحب؟", type:"Reel", primaryGoal:"Trust", secondaryGoal:"Followers", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" } },
+      { dayNum:2, weekday:"الأربعاء", date:"2026-11-18", phase:"P1", v1:{ title:"أقوى جدول تمرين تمشي عليه طول الشهر (Arnold Split)", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Leads", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" }, v2:{ title:"تمرينة كتف وذراع دمار شامل — سوبر سيت وتكنيك عالي", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" } },
+      { dayNum:3, weekday:"الخميس", date:"2026-11-19", phase:"P1", v1:{ title:"خلاصة أقوى نظام تمرين FST-7 للشهر كامل — هاني رامبود", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" }, v2:{ title:"مش هتحتاج غير التمرينين دول لكل عضلة في جسمك", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Trust", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" } },
+      { dayNum:4, weekday:"الجمعة", date:"2026-11-20", phase:"P1", v1:{ title:"خلاصة تمرين وبطولات الدبابة سام سوليك للشهر كامل", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" }, v2:{ title:"أسلوب البطل رامون دينو لتفجير عضلات الظهر العريض", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" } },
+      { dayNum:5, weekday:"السبت", date:"2026-11-21", phase:"P1", v1:{ title:"السر اللي خلى كريس بومستيد CBum يبني أعرض صدر", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" }, v2:{ title:"جدول تمرين الذراع للأسطورة روني كولمان", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Trust", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" } },
+      { dayNum:6, weekday:"الأحد", date:"2026-11-22", phase:"P2", v1:{ title:"العودة والتحدي 1 (فيديو العودة الرسمي)", type:"Reel", primaryGoal:"Trust", secondaryGoal:"Followers", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" }, v2:null },
+      { dayNum:7, weekday:"الاثنين", date:"2026-11-23", phase:"P2", v1:{ title:"بوش نايل داروين (Push)", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" }, v2:null },
+      { dayNum:8, weekday:"الثلاثاء", date:"2026-11-24", phase:"P2", v1:{ title:"بول نايل داروين (Pull)", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" }, v2:null },
+      { dayNum:9, weekday:"الأربعاء", date:"2026-11-25", phase:"P2", v1:{ title:"رجل نايل داروين (Legs)", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"تم النشر", driveLink:"" }, v2:null },
+      { dayNum:10, weekday:"الخميس", date:"2026-11-26", phase:"P2", v1:{ title:"فيديو الصفحة الرئيسية (Home Page Video)", type:"Reel", primaryGoal:"Trust", secondaryGoal:"Leads", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok + Website", status:"لم يُنشر", driveLink:"" }, v2:null },
+      { dayNum:11, weekday:"الجمعة", date:"2026-11-27", phase:"P2", v1:{ title:"فيديو الكوتشينج للويبسايت (Online Coaching 1)", type:"Reel", primaryGoal:"Leads", secondaryGoal:"Direct Sales", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok + Website", status:"لم يُنشر", driveLink:"" }, v2:null },
+      { dayNum:12, weekday:"السبت", date:"2026-11-28", phase:"P2", v1:{ title:"تمرينة الصدر العلوي (شرح عضلة واحدة مفصل)", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Trust", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:{ title:"(استشارات) تخيل تكون ملتزم وكل ما النتيجة تتغير تغير النظام", type:"Reel", primaryGoal:"Leads", secondaryGoal:"Direct Sales", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok + Website", status:"لم يُنشر", driveLink:"" } },
+      { dayNum:13, weekday:"الأحد", date:"2026-11-29", phase:"P3", v1:{ title:"إعلان كوتشينج للموظفين", type:"Reel", primaryGoal:"Direct Sales", secondaryGoal:"Leads", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:null },
+      { dayNum:14, weekday:"الاثنين", date:"2026-11-30", phase:"P3", v1:{ title:"ليه تشترك في الأونلاين كوتشينج ؟", type:"Reel", primaryGoal:"Direct Sales", secondaryGoal:"Trust", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:null },
+      { dayNum:15, weekday:"الثلاثاء", date:"2026-12-01", phase:"P3", v1:{ title:"عايز تخس أو تزيد في سيستم طوارئ", type:"Reel", primaryGoal:"Leads", secondaryGoal:"Direct Sales", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:null },
+      { dayNum:16, weekday:"الأربعاء", date:"2026-12-02", phase:"P3", v1:{ title:"لو أنت رياضي جسمك مصدر دخلك", type:"Reel", primaryGoal:"Leads", secondaryGoal:"Direct Sales", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:null },
+      { dayNum:17, weekday:"الخميس", date:"2026-12-03", phase:"P3", v1:{ title:"القولون العصبي والاستشارة التدريبية", type:"Reel", primaryGoal:"Leads", secondaryGoal:"Trust", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:null },
+      { dayNum:18, weekday:"الجمعة", date:"2026-12-04", phase:"P3", v1:{ title:"ليه برنامجك متلغبط ؟ (إعلان استشارة تدريبية)", type:"Reel", primaryGoal:"Leads", secondaryGoal:"Direct Sales", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:null },
+      { dayNum:19, weekday:"السبت", date:"2026-12-05", phase:"P3", v1:{ title:"أغبى سؤال ممكن تسأله (إعلان استشارات)", type:"Reel", primaryGoal:"Leads", secondaryGoal:"Trust", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:null },
+      { dayNum:20, weekday:"الأحد", date:"2026-12-06", phase:"P3", v1:{ title:"50 فيديو محفوظ (توعية بالاستشارة التدريبية)", type:"Reel", primaryGoal:"Leads", secondaryGoal:"Direct Sales", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:null },
+      { dayNum:21, weekday:"الاثنين", date:"2026-12-07", phase:"P3", v1:{ title:"هتيجي تقلي إيه يضمنلي في الاستشارة التدريبية", type:"Reel", primaryGoal:"Direct Sales", secondaryGoal:"Trust", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:null },
+      { dayNum:22, weekday:"الثلاثاء", date:"2026-12-08", phase:"P4", v1:{ title:"تمرينة الظهر (ضهر جديد)", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:{ title:"أكبر غلطة في التضخيم (Bulking)", type:"Reel", primaryGoal:"Trust", secondaryGoal:"Leads", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" } },
+      { dayNum:23, weekday:"الأربعاء", date:"2026-12-09", phase:"P4", v1:{ title:"تمرينة التراي (التراي)", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:{ title:"أكبر غلطة في التنشيف (Cutting)", type:"Reel", primaryGoal:"Trust", secondaryGoal:"Leads", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" } },
+      { dayNum:24, weekday:"الخميس", date:"2026-12-10", phase:"P4", v1:{ title:"تمرينة الذراع في 30 ثانية", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:{ title:"لو أنت رياضي وبتتمرن كل يوم", type:"Reel", primaryGoal:"Trust", secondaryGoal:"Leads", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" } },
+      { dayNum:25, weekday:"الجمعة", date:"2026-12-11", phase:"P4", v1:{ title:"تمرينة البوش في 30 ثانية", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:{ title:"ليه مش بغير نظام التمرين كل أسبوع", type:"Reel", primaryGoal:"Trust", secondaryGoal:"Followers", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" } },
+      { dayNum:26, weekday:"السبت", date:"2026-12-12", phase:"P4", v1:{ title:"تمرينة البول في 30 ثانية", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:{ title:"الحقيقة اللي مفيش مدرب عايز يقولها", type:"Reel", primaryGoal:"Trust", secondaryGoal:"Followers", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" } },
+      { dayNum:27, weekday:"الأحد", date:"2026-12-13", phase:"P4", v1:{ title:"تمرينة الرجل في 30 ثانية", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:{ title:"الدعوة في إيدك وتاريخ معروف", type:"Reel", primaryGoal:"Direct Sales", secondaryGoal:"Trust", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" } },
+      { dayNum:28, weekday:"الاثنين", date:"2026-12-14", phase:"P4", v1:{ title:"تمرينة الصدر والظهر (أرنولد سبليت)", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:{ title:"فيديو تاني (قيد التحديد لاحقاً)", type:"Reel", primaryGoal:"Trust", secondaryGoal:"Leads", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" } },
+      { dayNum:29, weekday:"الثلاثاء", date:"2026-12-15", phase:"P4", v1:{ title:"تمرينة الكتف والذراع (أرنولد سبليت)", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:{ title:"فيديو تاني (قيد التحديد لاحقاً)", type:"Reel", primaryGoal:"Trust", secondaryGoal:"Leads", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" } },
+      { dayNum:30, weekday:"الأربعاء", date:"2026-12-16", phase:"P4", v1:{ title:"تمرينة الرجل (أرنولد سبليت)", type:"Reel", primaryGoal:"Reach", secondaryGoal:"Followers", time:"3:00 – 4:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" }, v2:{ title:"فيديو تاني (قيد التحديد لاحقاً)", type:"Reel", primaryGoal:"Direct Sales", secondaryGoal:"Leads", time:"8:00 – 10:00 PM", platforms:"Instagram + Facebook + TikTok", status:"لم يُنشر", driveLink:"" } }
+    ];
+
+    let daysData = [];
+    let storiesData = [];
+    let currentView = "calendar";
+    let currentCalMode = "month";
+    let currentWeek = 1;
+    let chartGoalsInst = null;
+    let chartPhasesInst = null;
+
+    function detectPhase(raw) {
+      const s = String(raw || "");
+      if (s.includes("1 (ب)") || s.includes("الثانية") || s.includes("P2")) return "P2";
+      if (s.includes("1 (أ)") || s.includes("الأولى") || s.includes("P1")) return "P1";
+      if (s.includes("المرحلة 2") || s.includes("الإعلانات") || s.includes("Ads") || s.includes("P3")) return "P3";
+      return "P4";
+    }
+
+    function phaseMeta(p) {
+      if (p === "P1") return { label: "المرحلة 1 (أ): التهيئة الأولى", color: "#FF5500", cls: "bg-[#FF5500]/15 text-[#FF5500] border-[#FF5500]/35" };
+      if (p === "P2") return { label: "المرحلة 1 (ب): التهيئة الثانية", color: "#F59E0B", cls: "bg-amber-500/15 text-amber-400 border-amber-500/30" };
+      if (p === "P3") return { label: "المرحلة 2: الإعلانات Ads", color: "#10B981", cls: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" };
+      return { label: "المرحلة 3: الثقة والتمارين 2X", color: "#38BDF8", cls: "bg-sky-500/15 text-sky-400 border-sky-500/30" };
+    }
+
+    function flattenVideos(daysList) {
+      const flat = [];
+      daysList.forEach(d => {
+        if (d.v1 && d.v1.title) flat.push({ ...d.v1, dayNum: d.dayNum, weekday: d.weekday, date: d.date, phase: d.phase, slot: 1, key: `D${d.dayNum}-1` });
+        if (d.v2 && d.v2.title) flat.push({ ...d.v2, dayNum: d.dayNum, weekday: d.weekday, date: d.date, phase: d.phase, slot: 2, key: `D${d.dayNum}-2` });
+      });
+      return flat;
+    }
+
+    function loadDays() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) daysData = parsed;
+        }
+      } catch (e) {}
+      if (!daysData.length) daysData = JSON.parse(JSON.stringify(DEFAULT_DAYS));
+
+      try {
+        const savedS = localStorage.getItem(STORIES_STORAGE_KEY);
+        if (savedS) {
+          const parsedS = JSON.parse(savedS);
+          if (Array.isArray(parsedS) && parsedS.length > 0) storiesData = parsedS;
+        }
+      } catch (e) {}
+      if (!storiesData.length) storiesData = JSON.parse(JSON.stringify(DEFAULT_STORIES));
+    }
+
+    function persistDays() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(daysData)); } catch (e) {}
+      try { localStorage.setItem(STORIES_STORAGE_KEY, JSON.stringify(storiesData)); } catch (e) {}
+    }
+
+    function updateKPIs() {
+      const allV = flattenVideos(daysData);
+      const total = allV.length;
+      const pub = allV.filter(x => x.status === "تم النشر").length;
+      const pend = total - pub;
+      const linked = allV.filter(x => x.driveLink && x.driveLink.trim().startsWith("http")).length;
+      const pct = total > 0 ? Math.round((pub / total) * 100) : 0;
+
+      document.getElementById("kpiTotal").textContent = total;
+      document.getElementById("kpiPublished").textContent = pub;
+      document.getElementById("kpiPct").textContent = `${pct}% نسبة الإنجاز`;
+      document.getElementById("kpiPending").textContent = pend;
+      document.getElementById("kpiLinked").textContent = linked;
+    }
+
+    function videoMatchesFilters(v, dayObj) {
+      if (!v || !v.title) return false;
+      const ph = document.getElementById("filterPhase").value;
+      const gl = document.getElementById("filterGoal").value;
+      const st = document.getElementById("filterStatus").value;
+      const q = (document.getElementById("searchBox").value || "").trim().toLowerCase();
+
+      if (ph !== "ALL" && dayObj.phase !== ph) return false;
+      if (gl !== "ALL" && v.primaryGoal !== gl && v.secondaryGoal !== gl) return false;
+      if (st !== "ALL" && v.status !== st) return false;
+      if (q && !(v.title.toLowerCase().includes(q) || dayObj.weekday.toLowerCase().includes(q) || dayObj.date.includes(q))) return false;
+      return true;
+    }
+
+    function renderVideoPill(v, dayNum, slot) {
+      const isPub = v.status === "تم النشر";
+      const hasLink = v.driveLink && v.driveLink.trim().startsWith("http");
+      return `
+        <div onclick="openDetailModal(${dayNum}, ${slot})" class="p-3.5 rounded-xl cursor-pointer border transition ${
+          isPub ? 'bg-emerald-500/[0.08] border-emerald-500/30 hover:border-emerald-400' : 'bg-[#18181C] border-white/[0.08] hover:border-[#FF5500]/60'
+        }">
+          <div class="flex items-center justify-between gap-2 mb-2">
+            <span class="font-en text-[11px] font-bold text-[#FF5500]">⏰ ${v.time}</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${isPub ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/15 text-amber-400'}">
+              ${isPub ? 'تم النشر ✓' : 'لم يُنشر'}
+            </span>
+          </div>
+          <div class="text-xs font-extrabold text-white leading-relaxed mb-2.5">${v.title}</div>
+          <div class="flex flex-wrap items-center justify-between gap-1.5 text-[10px] text-[#A1A1AA]">
+            <div class="flex items-center gap-1.5 font-en font-bold">
+              <span class="px-2 py-0.5 rounded bg-white/[0.06] text-white">${v.type}</span>
+              <span class="px-2 py-0.5 rounded bg-[#FF5500]/15 text-[#FF5500]">${v.primaryGoal}</span>
+              <span>• ${v.secondaryGoal}</span>
+            </div>
+            ${hasLink ? '<span class="text-[#FF5500] font-bold">🔗 ملف درايف</span>' : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCalendar() {
+      // 1. Month View (Spacious 3-Col Cards)
+      const monthWrap = document.getElementById("calMonthWrap");
+      let monthHtml = "";
+      daysData.forEach(d => {
+        const m1 = videoMatchesFilters(d.v1, d);
+        const m2 = videoMatchesFilters(d.v2, d);
+        if (!m1 && !m2) return;
+        const pm = phaseMeta(d.phase);
+        const countBadge = (d.v1 && d.v2) ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-[#FF5500]/15 text-[#FF5500] font-bold">2 فيديو</span>' : '';
+
+        monthHtml += `
+          <div class="lux-card p-4 flex flex-col gap-3">
+            <div class="flex items-center justify-between border-b border-white/[0.07] pb-3">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg font-en text-xs font-extrabold flex items-center justify-center" style="background:${pm.color}22; color:${pm.color}">${d.dayNum}</span>
+                <div>
+                  <div class="text-xs font-extrabold text-white">${d.weekday}</div>
+                  <div class="font-en text-[11px] text-[#A1A1AA]">${d.date}</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                ${countBadge}
+                <span class="text-[10px] px-2 py-0.5 rounded-md border font-bold ${pm.cls}">${d.phase === 'P1' ? 'م1 أ' : d.phase === 'P2' ? 'م1 ب' : d.phase === 'P3' ? 'م2' : 'م3'}</span>
+              </div>
+            </div>
+            <div class="space-y-2.5">
+              ${m1 ? renderVideoPill(d.v1, d.dayNum, 1) : ''}
+              ${m2 ? renderVideoPill(d.v2, d.dayNum, 2) : ''}
+            </div>
+          </div>
+        `;
+      });
+      monthWrap.innerHTML = monthHtml || `<div class="col-span-full text-center py-14 text-sm text-[#A1A1AA]">لا توجد فيديوهات مطابقة للفلتر الحالي.</div>`;
+
+      // 2. Week View
+      const ranges = { 1: [1, 7], 2: [8, 14], 3: [15, 21], 4: [22, 30] };
+      const [ws, we] = ranges[currentWeek];
+      let wkHtml = "";
+      daysData.filter(d => d.dayNum >= ws && d.dayNum <= we).forEach(d => {
+        const m1 = videoMatchesFilters(d.v1, d);
+        const m2 = videoMatchesFilters(d.v2, d);
+        if (!m1 && !m2) return;
+        const pm = phaseMeta(d.phase);
+        wkHtml += `
+          <div class="lux-card p-5 space-y-3.5">
+            <div class="flex items-center justify-between border-b border-white/[0.07] pb-3">
+              <div class="text-sm font-extrabold text-white">اليوم ${d.dayNum} — ${d.weekday} <span class="font-en text-xs text-[#A1A1AA] mr-1">(${d.date})</span></div>
+              <span class="text-[10px] px-2.5 py-1 rounded-full border font-bold ${pm.cls}">${pm.label}</span>
+            </div>
+            <div class="grid grid-cols-1 ${(m1 && m2) ? 'sm:grid-cols-2' : ''} gap-3">
+              ${m1 ? renderVideoPill(d.v1, d.dayNum, 1) : ''}
+              ${m2 ? renderVideoPill(d.v2, d.dayNum, 2) : ''}
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById("calWeekGrid").innerHTML = wkHtml || `<div class="col-span-full text-center py-12 text-sm text-[#A1A1AA]">لا توجد منشورات في هذا الأسبوع حسب الفلتر.</div>`;
+
+      // 3. List View (Side-by-Side Table matching Google Sheet)
+      let listHtml = "";
+      daysData.forEach(d => {
+        const m1 = videoMatchesFilters(d.v1, d);
+        const m2 = videoMatchesFilters(d.v2, d);
+        if (!m1 && !m2) return;
+        const pm = phaseMeta(d.phase);
+        listHtml += `
+          <tr class="hover:bg-white/[0.02] transition align-top">
+            <td class="p-4 whitespace-nowrap">
+              <div class="font-extrabold text-white">اليوم ${d.dayNum} — ${d.weekday}</div>
+              <div class="font-en text-[11px] text-[#A1A1AA] mt-0.5">${d.date}</div>
+            </td>
+            <td class="p-4 whitespace-nowrap">
+              <span class="text-[10px] px-2.5 py-1 rounded-full border font-bold ${pm.cls}">${pm.label}</span>
+            </td>
+            <td class="p-4 min-w-[270px]">
+              ${m1 ? renderVideoPill(d.v1, d.dayNum, 1) : '<span class="text-[#71717A]">—</span>'}
+            </td>
+            <td class="p-4 min-w-[270px]">
+              ${m2 ? renderVideoPill(d.v2, d.dayNum, 2) : '<span class="text-[#71717A] text-xs">يوم بفيديو واحد فقط</span>'}
+            </td>
+          </tr>
+        `;
+      });
+      document.getElementById("calListBody").innerHTML = listHtml;
+    }
+
+    function renderOverview() {
+      const allV = flattenVideos(daysData);
+      const nextV = allV.find(x => x.status !== "تم النشر") || allV[0];
+      if (nextV) {
+        const pm = phaseMeta(nextV.phase);
+        document.getElementById("ovNextBadge").textContent = pm.label;
+        const hasLink = nextV.driveLink && nextV.driveLink.trim().startsWith("http");
+        document.getElementById("ovNextBox").innerHTML = `
+          <div class="text-xl sm:text-2xl font-black text-white leading-snug">${nextV.title}</div>
+          <div class="flex flex-wrap items-center gap-4 text-xs text-[#A1A1AA]">
+            <span>📅 اليوم ${nextV.dayNum} (${nextV.weekday}) — <span class="font-en text-white font-bold">${nextV.date}</span></span>
+            <span>⏰ <span class="font-en text-[#FF5500] font-bold">${nextV.time}</span></span>
+            <span>🎯 <span class="font-en text-white font-bold">${nextV.primaryGoal}</span> + ${nextV.secondaryGoal}</span>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 pt-1">
+            <button onclick="openDetailModal(${nextV.dayNum}, ${nextV.slot})" class="px-4 py-2 rounded-xl bg-[#FF5500] hover:bg-[#E04B00] text-white text-xs font-extrabold transition">عرض كل التفاصيل</button>
+            ${hasLink ? `<a href="${nextV.driveLink}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-white/[0.07] hover:bg-white/[0.14] text-white text-xs font-bold transition">📂 فتح ملف الفيديو على درايف ↗</a>` : ''}
+          </div>
+        `;
+      }
+
+      const upcoming = allV.filter(x => x.status !== "تم النشر").slice(1, 7);
+      document.getElementById("ovComingGrid").innerHTML = upcoming.map(v => `
+        <div onclick="openDetailModal(${v.dayNum}, ${v.slot})" class="p-4 rounded-2xl bg-[#0D0D10] border border-white/[0.07] hover:border-[#FF5500]/50 cursor-pointer transition space-y-2">
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="font-bold text-[#FF5500]">اليوم ${v.dayNum} • ${v.weekday}</span>
+            <span class="font-en text-[#A1A1AA]">${v.time}</span>
+          </div>
+          <div class="text-xs font-extrabold text-white leading-relaxed">${v.title}</div>
+          <div class="text-[11px] font-en text-[#A1A1AA]">${v.type} • ${v.primaryGoal} / ${v.secondaryGoal}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderAnalytics() {
+      const allV = flattenVideos(daysData);
+      const goals = ["Reach", "Followers", "Trust", "Leads", "Direct Sales"];
+      const gCounts = goals.map(g => allV.filter(x => x.primaryGoal === g).length);
+
+      const ctxG = document.getElementById("chartGoals");
+      if (ctxG) {
+        if (chartGoalsInst) chartGoalsInst.destroy();
+        chartGoalsInst = new Chart(ctxG, {
+          type: "doughnut",
+          data: {
+            labels: ["Reach (انتشار)", "Followers (متابعين)", "Trust (ثقة)", "Leads (ليدز)", "Direct Sales (مبيعات)"],
+            datasets: [{ data: gCounts, backgroundColor: ["#FF5500", "#F59E0B", "#10B981", "#38BDF8", "#A855F7"], borderColor: "#111114", borderWidth: 3 }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: "bottom", labels: { color: "#FAFAFA", font: { family: "Tajawal", weight: "bold" } } } }
+          }
+        });
+      }
+
+      const phases = ["P1", "P2", "P3", "P4"];
+      const pCounts = phases.map(p => allV.filter(x => x.phase === p).length);
+      const ctxP = document.getElementById("chartPhases");
+      if (ctxP) {
+        if (chartPhasesInst) chartPhasesInst.destroy();
+        chartPhasesInst = new Chart(ctxP, {
+          type: "bar",
+          data: {
+            labels: ["م1 (أ) التهيئة الأولى", "م1 (ب) التهيئة الثانية", "م2 الإعلانات Ads", "م3 الثقة والتمارين 2X"],
+            datasets: [{ label: "عدد الفيديوهات", data: pCounts, backgroundColor: ["#FF5500", "#F59E0B", "#10B981", "#38BDF8"], borderRadius: 10 }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: "#A1A1AA", font: { family: "Tajawal", weight: "bold" } }, grid: { display: false } },
+              y: { ticks: { color: "#A1A1AA" }, grid: { color: "rgba(255,255,255,0.06)" } }
+            }
+          }
+        });
+      }
+    }
+
+    function openDetailModal(dayNum, slot) {
+      const d = daysData.find(x => x.dayNum === dayNum);
+      if (!d) return;
+      const v = slot === 2 ? d.v2 : d.v1;
+      if (!v) return;
+      const pm = phaseMeta(d.phase);
+      const isPub = v.status === "تم النشر";
+      const hasLink = v.driveLink && v.driveLink.trim().startsWith("http");
+
+      const badge = document.getElementById("mBadge");
+      badge.className = `text-[11px] px-2.5 py-1 rounded-full font-bold border ${pm.cls}`;
+      badge.textContent = pm.label;
+      document.getElementById("mSlotLabel").textContent = `اليوم ${d.dayNum} (${d.weekday}) • فيديو ${slot}`;
+
+      document.getElementById("detailModalBody").innerHTML = `
+        <h3 class="text-lg font-black text-white leading-snug">${v.title}</h3>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-3.5 rounded-xl bg-[#0D0D10] border border-white/[0.07]">
+            <div class="text-[#71717A] mb-1">التاريخ</div>
+            <div class="font-en font-bold text-white">${d.date}</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-[#0D0D10] border border-white/[0.07]">
+            <div class="text-[#71717A] mb-1">ميعاد النشر</div>
+            <div class="font-en font-bold text-[#FF5500]">${v.time}</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-[#0D0D10] border border-white/[0.07]">
+            <div class="text-[#71717A] mb-1">الهدف الأساسي</div>
+            <div class="font-en font-bold text-white">${v.primaryGoal}</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-[#0D0D10] border border-white/[0.07]">
+            <div class="text-[#71717A] mb-1">الهدف الثانوي</div>
+            <div class="font-en font-bold text-[#A1A1AA]">${v.secondaryGoal}</div>
+          </div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-[#0D0D10] border border-white/[0.07] flex items-center justify-between">
+          <div>
+            <div class="text-[#71717A] mb-0.5">المنصات</div>
+            <div class="font-en font-bold text-white">${v.platforms}</div>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-bold ${isPub ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/15 text-amber-400'}">
+            ${isPub ? 'تم النشر ✓' : 'لم يُنشر ⏳'}
+          </span>
+        </div>
+        <div class="pt-1">
+          ${hasLink
+            ? `<a href="${v.driveLink}" target="_blank" rel="noopener noreferrer" class="block w-full py-3 rounded-xl bg-[#FF5500] hover:bg-[#E04B00] text-center text-white font-extrabold transition">📂 فتح ملف الفيديو الأصلي على جوجل درايف ↗</a>`
+            : `<div class="p-3.5 rounded-xl bg-white/[0.03] border border-dashed border-white/[0.12] text-center text-[#A1A1AA]">لينك الملف على جوجل درايف سيظهر هنا تلقائياً فور إضافته في الشيت.</div>`
+          }
+        </div>
+      `;
+
+      document.getElementById("detailModal").classList.remove("hidden");
+      document.getElementById("detailModal").classList.add("flex");
+    }
+
+    function closeDetailModal() {
+      document.getElementById("detailModal").classList.add("hidden");
+      document.getElementById("detailModal").classList.remove("flex");
+    }
+
+    function switchView(v) {
+      currentView = v;
+      const views = { overview: "viewOverview", calendar: "viewCalendar", stories: "viewStories", analytics: "viewAnalytics" };
+      const navs = { overview: ["navOverview", "mNavOverview"], calendar: ["navCalendar", "mNavCalendar"], stories: ["navStories", "mNavStories"], analytics: ["navAnalytics", "mNavAnalytics"] };
+
+      Object.keys(views).forEach(k => {
+        const el = document.getElementById(views[k]);
+        if (k === v) {
+          el.classList.remove("hidden");
+          el.classList.add((k === "calendar" || k === "stories") ? "flex" : "grid");
+        } else {
+          el.classList.add("hidden");
+          el.classList.remove("flex", "grid");
+        }
+        navs[k].forEach(nid => {
+          const btn = document.getElementById(nid);
+          if (!btn) return;
+          if (k === v) btn.classList.add("active");
+          else btn.classList.remove("active");
+        });
+      });
+
+      if (v === "overview") renderOverview();
+      if (v === "stories") renderStories();
+      if (v === "analytics") setTimeout(renderAnalytics, 40);
+    }
+
+    function setCalMode(mode) {
+      currentCalMode = mode;
+      const btns = { month: "btnModeMonth", week: "btnModeWeek", list: "btnModeList" };
+      Object.keys(btns).forEach(k => {
+        document.getElementById(btns[k]).className = k === mode
+          ? "px-4 py-2 rounded-lg text-xs font-extrabold bg-[#FF5500] text-white transition"
+          : "px-4 py-2 rounded-lg text-xs font-bold text-[#A1A1AA] hover:text-white transition";
+      });
+      document.getElementById("calMonthWrap").classList.toggle("hidden", mode !== "month");
+      document.getElementById("calWeekWrap").classList.toggle("hidden", mode !== "week");
+      if (mode === "week") document.getElementById("calWeekWrap").classList.add("flex");
+      document.getElementById("calListWrap").classList.toggle("hidden", mode !== "list");
+    }
+
+    function selectWeek(wk) {
+      currentWeek = wk;
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById("wkBtn" + i).className = i === wk
+          ? "px-4 py-2 rounded-xl text-xs font-extrabold bg-[#FF5500] text-white"
+          : "px-4 py-2 rounded-xl text-xs font-bold bg-[#18181C] text-[#A1A1AA] border border-white/[0.08]";
+      }
+      renderCalendar();
+    }
+
+    // =========================================================================
+    // LIVE GOOGLE SHEET SYNC ENGINE (20-COLUMN SIDE-BY-SIDE PARSER)
+    // =========================================================================
+    function mapGvizSideBySide(gvizResp) {
+      if (!gvizResp || !gvizResp.table || !Array.isArray(gvizResp.table.rows)) return [];
+      const parsedDays = [];
+      gvizResp.table.rows.forEach((rowObj, idx) => {
+        const c = rowObj.c || [];
+        const val = (i) => {
+          const cell = c[i];
+          if (!cell) return "";
+          if (cell.f !== undefined && cell.f !== null && String(cell.f).trim() !== "") return String(cell.f).trim();
+          if (cell.v !== undefined && cell.v !== null) return String(cell.v).trim();
+          return "";
+        };
+        const dayStr = val(0);
+        const v1Title = val(4);
+        if (!v1Title || v1Title.includes("عنوان الكونتنت")) return;
+
+        const dm = dayStr.match(/\d+/);
+        const dayNum = dm ? parseInt(dm[0], 10) : (idx + 1);
+        const v2Title = val(12);
+        const hasV2 = v2Title && v2Title !== "-" && v2Title !== "—";
+
+        parsedDays.push({
+          dayNum: dayNum,
+          weekday: val(1),
+          date: val(2),
+          phase: detectPhase(val(3)),
+          v1: {
+            title: v1Title,
+            type: val(5) || "Reel",
+            primaryGoal: val(6) || "Reach",
+            secondaryGoal: val(7) || "Followers",
+            time: val(8) || "8:00 – 10:00 PM",
+            platforms: val(9) || "Instagram + Facebook + TikTok",
+            status: val(10).includes("تم") ? "تم النشر" : "لم يُنشر",
+            driveLink: val(11)
+          },
+          v2: hasV2 ? {
+            title: v2Title,
+            type: val(13) || "Reel",
+            primaryGoal: val(14) || "Trust",
+            secondaryGoal: val(15) || "Leads",
+            time: val(16) || "8:00 – 10:00 PM",
+            platforms: val(17) || "Instagram + Facebook + TikTok",
+            status: val(18).includes("تم") ? "تم النشر" : "لم يُنشر",
+            driveLink: val(19)
+          } : null
+        });
+      });
+      return parsedDays;
+    }
+
+    function parseCsvText(csvText) {
+      const rows = [];
+      let cur = "", inQ = false, row = [];
+      for (let i = 0; i < csvText.length; i++) {
+        const ch = csvText[i];
+        if (ch === '"') {
+          if (inQ && csvText[i + 1] === '"') { cur += '"'; i++; }
+          else inQ = !inQ;
+        } else if (ch === ',' && !inQ) {
+          row.push(cur.trim()); cur = "";
+        } else if ((ch === '\n' || ch === '\r') && !inQ) {
+          if (cur.length > 0 || row.length > 0) { row.push(cur.trim()); rows.push(row); row = []; cur = ""; }
+        } else { cur += ch; }
+      }
+      if (cur.length > 0 || row.length > 0) { row.push(cur.trim()); rows.push(row); }
+      return rows;
+    }
+
+    function mapCsvSideBySide(rows) {
+      const parsedDays = [];
+      for (let i = 1; i < rows.length; i++) {
+        const r = rows[i];
+        if (!r || !r[4]) continue;
+        const dm = String(r[0] || "").match(/\d+/);
+        const dayNum = dm ? parseInt(dm[0], 10) : i;
+        const v2Title = (r[12] || "").trim();
+        const hasV2 = v2Title && v2Title !== "-" && v2Title !== "—";
+        parsedDays.push({
+          dayNum: dayNum,
+          weekday: r[1] || "",
+          date: r[2] || "",
+          phase: detectPhase(r[3] || ""),
+          v1: {
+            title: r[4],
+            type: r[5] || "Reel",
+            primaryGoal: r[6] || "Reach",
+            secondaryGoal: r[7] || "Followers",
+            time: r[8] || "8:00 – 10:00 PM",
+            platforms: r[9] || "Instagram + Facebook + TikTok",
+            status: (r[10] || "").includes("تم") ? "تم النشر" : "لم يُنشر",
+            driveLink: r[11] || ""
+          },
+          v2: hasV2 ? {
+            title: v2Title,
+            type: r[13] || "Reel",
+            primaryGoal: r[14] || "Trust",
+            secondaryGoal: r[15] || "Leads",
+            time: r[16] || "8:00 – 10:00 PM",
+            platforms: r[17] || "Instagram + Facebook + TikTok",
+            status: (r[18] || "").includes("تم") ? "تم النشر" : "لم يُنشر",
+            driveLink: r[19] || ""
+          } : null
+        });
+      }
+      return parsedDays;
+    }
+
+    function fetchGvizJsonp(sheetId, sheetName) {
+      return new Promise((resolve, reject) => {
+        const cbName = "__aaSyncCb_" + Date.now() + "_" + Math.floor(Math.random() * 9999);
+        const script = document.createElement("script");
+        let done = false;
+        const timer = setTimeout(() => { if (!done) { done = true; cleanup(); reject(new Error("timeout")); } }, 9000);
+        function cleanup() {
+          clearTimeout(timer);
+          try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+          if (script.parentNode) script.parentNode.removeChild(script);
+        }
+        window[cbName] = function(resp) { if (!done) { done = true; cleanup(); resolve(resp); } };
+        script.onerror = function() { if (!done) { done = true; cleanup(); reject(new Error("err")); } };
+        script.src = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(sheetId)}/gviz/tq?tqx=responseHandler:${cbName}&sheet=${encodeURIComponent(sheetName)}&t=${Date.now()}`;
+        document.head.appendChild(script);
+      });
+    }
+
+    function storyModeBadge(mode) {
+      const m = String(mode || "");
+      if (m.includes("عرض")) return { cls: "bg-[#FF5500]/20 text-[#FF5500] border-[#FF5500]/45", border: "border-[#FF5500]/45" };
+      if (m.includes("كامبين") || m.includes("ليدز")) return { cls: "bg-emerald-500/15 text-emerald-400 border-emerald-500/35", border: "border-emerald-500/25" };
+      return { cls: "bg-white/[0.06] text-[#A1A1AA] border-white/[0.12]", border: "border-white/[0.08]" };
+    }
+
+    function renderStories() {
+      const nextSt = storiesData.find(x => x.status !== "تم النشر") || storiesData[0];
+      if (nextSt) {
+        document.getElementById("stNextMeta").textContent = `اليوم ${nextSt.dayNum} (${nextSt.weekday} ${nextSt.date}) • ${nextSt.mode}`;
+        const slots = [
+          { num: "01", title: "الصباح — لايف ستايل وعلاقة", text: nextSt.s1, color: "text-amber-400" },
+          { num: "02", title: "الظهر — تشويق / بداية البيع", text: nextSt.s2, color: "text-[#FF5500]" },
+          { num: "03", title: "العصر — تفاعل / تحول وCTA", text: nextSt.s3, color: "text-emerald-400" },
+          { num: "04", title: "المساء — زق الريل باللينك", text: nextSt.s4, color: "text-sky-400" }
+        ];
+        document.getElementById("stNextBody").innerHTML = slots.map(sl => `
+          <div class="p-4 rounded-2xl bg-[#0D0D10] border border-white/[0.08] space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-extrabold ${sl.color}">${sl.title}</span>
+              <span class="font-en text-[10px] font-bold text-[#71717A]">${sl.num}</span>
+            </div>
+            <p class="text-xs text-white leading-relaxed">${sl.text || "—"}</p>
+          </div>
+        `).join("");
+      }
+
+      const fMode = document.getElementById("stFilterMode").value;
+      const fStat = document.getElementById("stFilterStatus").value;
+      const q = (document.getElementById("stSearchBox").value || "").trim().toLowerCase();
+
+      const filtered = storiesData.filter(st => {
+        if (fMode !== "ALL" && !String(st.mode).includes(fMode)) return false;
+        if (fStat !== "ALL" && st.status !== fStat) return false;
+        if (q && !(`${st.s1} ${st.s2} ${st.s3} ${st.s4} ${st.weekday} ${st.date}`.toLowerCase().includes(q))) return false;
+        return true;
+      });
+
+      document.getElementById("storiesGridWrap").innerHTML = filtered.map(st => {
+        const bm = storyModeBadge(st.mode);
+        const isPub = st.status === "تم النشر";
+        const hasWa = String(st.waChannel || "").includes("نعم");
+        return `
+          <div class="lux-card p-5 space-y-3.5 ${bm.border}">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.07] pb-3">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg font-en text-xs font-extrabold flex items-center justify-center bg-white/[0.06] text-white">${st.dayNum}</span>
+                <div>
+                  <div class="text-xs font-extrabold text-white">${st.weekday} <span class="font-en text-[#A1A1AA] font-normal mr-1">${st.date}</span></div>
+                </div>
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-[10px] px-2.5 py-0.5 rounded-full border font-bold ${bm.cls}">${st.mode}</span>
+                ${hasWa ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-bold">📢 لينك قناة واتساب</span>' : ''}
+                <span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold ${isPub ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/15 text-amber-400'}">${isPub ? 'تم النشر ✓' : 'لم يُنشر'}</span>
+              </div>
+            </div>
+            <div class="space-y-2.5 text-xs">
+              <div class="p-3 rounded-xl bg-[#0D0D10] border border-white/[0.06]">
+                <span class="text-amber-400 font-extrabold ml-1">1. الصباح:</span>
+                <span class="text-[#FAFAFA]">${st.s1}</span>
+              </div>
+              <div class="p-3 rounded-xl bg-[#0D0D10] border border-white/[0.06]">
+                <span class="text-[#FF5500] font-extrabold ml-1">2. التشويق / البيع:</span>
+                <span class="text-[#FAFAFA]">${st.s2}</span>
+              </div>
+              <div class="p-3 rounded-xl bg-[#0D0D10] border border-white/[0.06]">
+                <span class="text-emerald-400 font-extrabold ml-1">3. التفاعل / التحول:</span>
+                <span class="text-[#FAFAFA]">${st.s3}</span>
+              </div>
+              <div class="p-3 rounded-xl bg-[#0D0D10] border border-white/[0.06]">
+                <span class="text-sky-400 font-extrabold ml-1">4. زق الريل:</span>
+                <span class="text-[#FAFAFA]">${st.s4}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("") || `<div class="col-span-full text-center py-12 text-sm text-[#A1A1AA]">لا توجد ستوريز مطابقة للفلتر الحالي.</div>`;
+    }
+
+    function mapGvizStories(gvizResp) {
+      if (!gvizResp || !gvizResp.table || !Array.isArray(gvizResp.table.rows)) return [];
+      const list = [];
+      gvizResp.table.rows.forEach((rowObj, idx) => {
+        const c = rowObj.c || [];
+        const val = (i) => {
+          const cell = c[i];
+          if (!cell) return "";
+          if (cell.f !== undefined && cell.f !== null && String(cell.f).trim() !== "") return String(cell.f).trim();
+          if (cell.v !== undefined && cell.v !== null) return String(cell.v).trim();
+          return "";
+        };
+        const dStr = val(0);
+        const s1 = val(4);
+        if (!s1 && !val(5)) return;
+        const dm = dStr.match(/\d+/);
+        list.push({
+          dayNum: dm ? parseInt(dm[0], 10) : (idx + 1),
+          weekday: val(1),
+          date: val(2),
+          mode: val(3) || "تسخين وتفاعل",
+          s1: s1,
+          s2: val(5),
+          s3: val(6),
+          s4: val(7),
+          waChannel: val(8) || "لا",
+          status: val(9).includes("تم") ? "تم النشر" : "لم يُنشر"
+        });
+      });
+      return list;
+    }
+
+    function mapCsvStories(rows) {
+      const list = [];
+      for (let i = 1; i < rows.length; i++) {
+        const r = rows[i];
+        if (!r || (!r[4] && !r[5])) continue;
+        const dm = String(r[0] || "").match(/\d+/);
+        list.push({
+          dayNum: dm ? parseInt(dm[0], 10) : i,
+          weekday: r[1] || "",
+          date: r[2] || "",
+          mode: r[3] || "تسخين وتفاعل",
+          s1: r[4] || "",
+          s2: r[5] || "",
+          s3: r[6] || "",
+          s4: r[7] || "",
+          waChannel: r[8] || "لا",
+          status: (r[9] || "").includes("تم") ? "تم النشر" : "لم يُنشر"
+        });
+      }
+      return list;
+    }
+
+    async function syncFromGoogleSheet(silent) {
+      const dot = document.getElementById("syncDot");
+      const lbl = document.getElementById("syncLabel");
+      dot.className = "w-2 h-2 rounded-full bg-amber-400 animate-pulse";
+      lbl.textContent = "جاري التحديث...";
+
+      let parsedDays = [];
+      let parsedStories = [];
+
+      // Sync Tab 1 (Calendar)
+      try {
+        const resp = await fetchGvizJsonp(SHEET_ID, SHEET_TAB);
+        parsedDays = mapGvizSideBySide(resp);
+      } catch (e1) {
+        try {
+          const url = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(SHEET_ID)}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_TAB)}&t=${Date.now()}`;
+          const res = await fetch(url);
+          if (res.ok) {
+            const txt = await res.text();
+            if (!txt.includes("<!DOCTYPE html>")) parsedDays = mapCsvSideBySide(parseCsvText(txt));
+          }
+        } catch (e2) {}
+      }
+
+      // Sync Tab 3 (Stories Plan)
+      try {
+        const respS = await fetchGvizJsonp(SHEET_ID, STORIES_TAB);
+        parsedStories = mapGvizStories(respS);
+      } catch (e3) {
+        try {
+          const urlS = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(SHEET_ID)}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(STORIES_TAB)}&t=${Date.now()}`;
+          const resS = await fetch(urlS);
+          if (resS.ok) {
+            const txtS = await resS.text();
+            if (!txtS.includes("<!DOCTYPE html>")) parsedStories = mapCsvStories(parseCsvText(txtS));
+          }
+        } catch (e4) {}
+      }
+
+      if (parsedDays.length > 0 || parsedStories.length > 0) {
+        if (parsedDays.length > 0) daysData = parsedDays;
+        if (parsedStories.length > 0) storiesData = parsedStories;
+        persistDays();
+        renderAll();
+        const now = new Date().toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" });
+        dot.className = "w-2 h-2 rounded-full bg-emerald-400";
+        lbl.textContent = `محدّث الآن (${now})`;
+        if (!silent) showToast(`تم تحديث الكاليندر (${flattenVideos(daysData).length} فيديو) وخطة الاستوريز (${storiesData.length} يوم) ✓`);
+      } else {
+        dot.className = "w-2 h-2 rounded-full bg-zinc-400";
+        lbl.textContent = "تحديث الآن";
+        if (!silent) showToast("تعذر الاتصال بالإنترنت حالياً — معروض آخر نسخة محفوظة");
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.remove("hidden");
+      setTimeout(() => t.classList.add("hidden"), 2600);
+    }
+
+    function renderAll() {
+      updateKPIs();
+      renderCalendar();
+      if (currentView === "overview") renderOverview();
+      if (currentView === "stories") renderStories();
+      if (currentView === "analytics") renderAnalytics();
+    }
+
+    window.onload = function() {
+      loadDays();
+      renderAll();
+      syncFromGoogleSheet(true);
+    };
+  </script>
+</body>
+</html>
